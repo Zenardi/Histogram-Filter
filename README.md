@@ -3,7 +3,7 @@ Histogram Filter using C++
 
 #Python Version 
 #localizer.py
-import pdb
+```import pdb
 from helpers import normalize, blur
 
 def initialize_beliefs(grid):
@@ -47,9 +47,10 @@ def move(dy, dx, beliefs, blurring):
             # pdb.set_trace()
             new_G[int(new_j)][int(new_i)] = cell
     return blur(new_G, blurring)
-    
+```   
+
 #simulate.py
-import localizer 
+```import localizer 
 import random
 from copy import deepcopy
 from matplotlib import pyplot as plt
