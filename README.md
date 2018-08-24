@@ -1,9 +1,9 @@
 # Histogram-Filter
 Histogram Filter using C++
 
-##Python Version 
-###localizer.py
-# import pdb
+#Python Version 
+#localizer.py
+import pdb
 from helpers import normalize, blur
 
 def initialize_beliefs(grid):
@@ -48,7 +48,7 @@ def move(dy, dx, beliefs, blurring):
             new_G[int(new_j)][int(new_i)] = cell
     return blur(new_G, blurring)
     
-###simulate.py
+#simulate.py
 import localizer 
 import random
 from copy import deepcopy
