@@ -18,8 +18,7 @@
 using namespace std;
 
 /**
-	TODO - implement this function 
-    
+ 
     Initializes a grid of beliefs to a uniform distribution. 
 
     @param grid - a two dimensional grid map (vector of vectors 
@@ -70,7 +69,6 @@ vector< vector <float> > initialize_beliefs(vector< vector <char> > grid) {
 }
 
 /**
-	TODO - implement this function 
     
     Implements robot sensing by updating beliefs based on the 
     color of a sensor measurement 
@@ -146,7 +144,6 @@ vector< vector <float> > sense(char color,
 
 
 /**
-	TODO - implement this function 
     
     Implements robot motion by updating beliefs based on the 
     intended dx and dy of the robot. 
@@ -199,8 +196,6 @@ vector< vector <float> > move(int dy, int dx,
 	vector < vector <float> > newGrid;
 	int height = beliefs.size();
 	int width = beliefs[0].size();
-
-	//new_G?
 
 	vector < vector<float> > new_G;
 	for (int h = 0; h < height; ++h) {

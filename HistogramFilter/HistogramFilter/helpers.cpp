@@ -20,8 +20,6 @@
 using namespace std;
 
 /**
-	TODO - implement this function
-
     Normalizes a grid of numbers. 
 
     @param grid - a two dimensional grid (vector of vectors of floats)
@@ -32,17 +30,33 @@ using namespace std;
     	   all probabilities is equal to one.
 */
 vector< vector<float> > normalize(vector< vector <float> > grid) {
-	
-	vector< vector<float> > newGrid;
+	// total = 0.0
+    // for row in grid:
+    //     for cell in row:
+    //         total += cell
+    // for i,row in enumerate(grid):
+    //     for j,cell in enumerate(row):
+    //         grid[i][j] = float(cell) / total
+    // return grid
 
-	// todo - your code here
+	vector< vector<float> > newGrid;
+	float total = 0.f;
+	for(int row = 0; row < grid.size(); ++row){
+		for(int cell = 0; cell < grid[row].size(); ++cell){
+			total += grid[row][cell];
+		}
+	}
+	
+	for(int row = 0; row < grid.size(); ++row){
+		for(int cell; cell < grid[row].size(); ++cell){
+			grid[row][cell] = float(grid[row][cell]) / total;
+		}
+	}
 
 	return newGrid;
 }
 
 /**
-	TODO - implement this function.
-
     Blurs (and normalizes) a grid of probabilities by spreading 
     probability from each cell over a 3x3 "window" of cells. This 
     function assumes a cyclic world where probability "spills 
@@ -75,9 +89,63 @@ vector< vector<float> > normalize(vector< vector <float> > grid) {
 */
 vector < vector <float> > blur(vector < vector < float> > grid, float blurring) {
 
+	// height = len(grid)
+    // width  = len(grid[0])
+	float height = grid.size();
+	float width = grid[0].size();
+
+    // center_prob = 1.0-blurring
+    // corner_prob = blurring / 12.0
+    // adjacent_prob = blurring / 6.0
+	float center_prob = 1.0f - blurring;
+	float corner_prob = blurring / 12.0f;
+	float adjacent_prob = blurring / 6.0f;
+
+    // window = [
+    //         [corner_prob,  adjacent_prob,  corner_prob],
+    //         [adjacent_prob, center_prob,  adjacent_prob],
+    //         [corner_prob,  adjacent_prob,  corner_prob]
+    //     ]
+	vector< vector <float> > window = {
+		    {corner_prob,  adjacent_prob,  corner_prob},
+            {adjacent_prob, center_prob,  adjacent_prob},
+            {corner_prob,  adjacent_prob,  corner_prob}
+	};
+
+    // new = [[0.0 for i in range(width)] for j in range(height)]
 	vector < vector <float> > newGrid;
-	
-	// your code here
+	for (int h = 0; h < height; ++h) {
+		vector<float> init_row;
+		for (int w = 0; w < width; ++w) {
+			init_row.push_back(0);
+		}
+		newGrid.push_back(init_row);
+	}
+
+    // for i in range(height):
+    //     for j in range(width):
+    //         grid_val = grid[i][j]
+    //         for dx in range(-1,2):
+    //             for dy in range(-1,2):
+    //                 mult = window[dx+1][dy+1]
+    //                 new_i = (i + dy) % height
+    //                 new_j = (j + dx) % width
+    //                 new[new_i][new_j] += mult * grid_val
+    // return normalize(new)
+	for(int i = 0; i < height; ++i){
+		for(int j = 0; j < width; ++j){
+			float grid_val = grid[i][j];
+			for(int dx = -1; dx < 2; ++dx){
+				for(int dy = -1; dy < 2; ++dy){
+					float mult = window[dx+1][dy+1];
+					int new_i = (i + dy) % int(height);
+					int new_j = (j+ dx) % int(width);
+					newGrid[new_i][new_j] + mult * grid_val;
+				}
+			}
+		}
+	}
+
 
 	return normalize(newGrid);
 }
