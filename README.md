@@ -1,8 +1,8 @@
 # Histogram-Filter
 Histogram Filter using C++
 
-#Python Version 
-#localizer.py
+# Python Version 
+## localizer.py
 ```import pdb
 from helpers import normalize, blur
 
@@ -49,7 +49,7 @@ def move(dy, dx, beliefs, blurring):
     return blur(new_G, blurring)
 ```   
 
-#simulate.py
+## simulate.py
 ```import localizer 
 import random
 from copy import deepcopy
