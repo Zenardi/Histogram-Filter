@@ -4,7 +4,8 @@
 	Purpose: helper functions for debugging when working
 	with grids of floats and chars.
 */
-
+#ifndef DEBUGGING_HELPER
+#define DEBUGGING_HELPER
 #include <vector>
 using namespace std;
 
@@ -50,3 +51,4 @@ void show_grid(vector < vector <char> > map) {
 	}
 }
 
+#endif

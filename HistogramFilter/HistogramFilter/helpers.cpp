@@ -15,9 +15,14 @@
 #include <cmath>
 #include <string>
 #include <fstream> 
-// #include "debugging_helpers.cpp"
+#include "debugging_helpers.cpp"
 
 using namespace std;
+vector < vector <float> > zeros(int height, int width);
+// vector< vector<float> > init_zeros(int height, int width) {
+// 	vector< vector<float> > newGrid(height, vector<float> (width));
+// 	return newGrid;
+// }
 
 /**
     Normalizes a grid of numbers. 
@@ -39,21 +44,21 @@ vector< vector<float> > normalize(vector< vector <float> > grid) {
     //         grid[i][j] = float(cell) / total
     // return grid
 
-	vector< vector<float> > newGrid;
 	float total = 0.f;
-	for(int row = 0; row < grid.size(); ++row){
-		for(int cell = 0; cell < grid[row].size(); ++cell){
-			total += grid[row][cell];
-		}
+	for (auto row : grid) { // access by value
+			for (auto cell : row) {
+				total += cell;
+			}
 	}
-	
-	for(int row = 0; row < grid.size(); ++row){
-		for(int cell; cell < grid[row].size(); ++cell){
-			grid[row][cell] = float(grid[row][cell]) / total;
+
+
+	for (auto& row : grid) { // access by forwarding reference
+		for (auto& cell: row) {
+			cell = cell/total;
 		}
 	}
 
-	return newGrid;
+	return grid;
 }
 
 /**
@@ -91,36 +96,28 @@ vector < vector <float> > blur(vector < vector < float> > grid, float blurring) 
 
 	// height = len(grid)
     // width  = len(grid[0])
-	float height = grid.size();
-	float width = grid[0].size();
+	const int height = grid.size();
+	const int width = grid[0].size();
 
     // center_prob = 1.0-blurring
     // corner_prob = blurring / 12.0
     // adjacent_prob = blurring / 6.0
-	float center_prob = 1.0f - blurring;
-	float corner_prob = blurring / 12.0f;
-	float adjacent_prob = blurring / 6.0f;
+	const float center_prob = 1.0 - blurring;
+	const float corner_prob = blurring / 12.0;
+	const float adjacent_prob = blurring / 6.0;
 
     // window = [
     //         [corner_prob,  adjacent_prob,  corner_prob],
     //         [adjacent_prob, center_prob,  adjacent_prob],
     //         [corner_prob,  adjacent_prob,  corner_prob]
     //     ]
-	vector< vector <float> > window = {
-		    {corner_prob,  adjacent_prob,  corner_prob},
-            {adjacent_prob, center_prob,  adjacent_prob},
-            {corner_prob,  adjacent_prob,  corner_prob}
-	};
+	vector< vector <float> > window {{corner_prob, adjacent_prob, corner_prob},
+					{adjacent_prob, center_prob, adjacent_prob},
+					{corner_prob, adjacent_prob, corner_prob}
+					};
 
     // new = [[0.0 for i in range(width)] for j in range(height)]
-	vector < vector <float> > newGrid;
-	for (int h = 0; h < height; ++h) {
-		vector<float> init_row;
-		for (int w = 0; w < width; ++w) {
-			init_row.push_back(0);
-		}
-		newGrid.push_back(init_row);
-	}
+	vector < vector <float> > newGrid= zeros(height, width); 
 
     // for i in range(height):
     //     for j in range(width):
@@ -132,20 +129,19 @@ vector < vector <float> > blur(vector < vector < float> > grid, float blurring) 
     //                 new_j = (j + dx) % width
     //                 new[new_i][new_j] += mult * grid_val
     // return normalize(new)
-	for(int i = 0; i < height; ++i){
-		for(int j = 0; j < width; ++j){
+	for(int i = 0; i < height; i++){
+		for(int j = 0; j < width; j++){
 			float grid_val = grid[i][j];
-			for(int dx = -1; dx < 2; ++dx){
-				for(int dy = -1; dy < 2; ++dy){
-					float mult = window[dx+1][dy+1];
-					int new_i = (i + dy) % int(height);
-					int new_j = (j+ dx) % int(width);
-					newGrid[new_i][new_j] + mult * grid_val;
+			for (int dx : {-1, 0, 1}) {
+				for (int dy : {-1, 0, 1}) {
+                    int new_i = (i + dy + height) % height;
+                    int new_j = (j + dx + width) % width;
+                    float mult = window[dx+1][dy+1];
+                    newGrid[new_i][new_j] += grid_val * mult;
 				}
 			}
 		}
 	}
-
 
 	return normalize(newGrid);
 }
