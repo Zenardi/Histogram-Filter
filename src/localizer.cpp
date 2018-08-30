@@ -54,16 +54,7 @@ vector< vector <float> > initialize_beliefs(vector< vector <char> > grid) {
 	int width = grid[0].size();
 	float area = width * height;
 	float belief_per_cell = 1.0f / area;
-	vector< vector <float> > beliefs;
-	for (int i = 0; i < height; ++i)
-	{
-		vector<float> row;
-		for (int j = 0; j < width; ++i)
-		{
-			row.push_back(belief_per_cell);
-		}
-		beliefs.push_back(row);
-	}
+	vector< vector <float> > beliefs(height, std::vector<float> (width, belief_per_cell));
 
 	return beliefs;
 }
@@ -124,16 +115,16 @@ vector< vector <float> > sense(char color,
 	//	new_beliefs.append(new_row)
 //new_beliefs = normalize(new_beliefs)	
 	float p = 0;
-	vector< vector <float> > new_beliefs;
+	vector< vector <float> > new_beliefs = zeros(grid.size(), grid[0].size());
 	for (int y = 0; y < grid.size(); ++y) {
 		vector<float> new_row;
 		for (int x = 0; x < grid[0].size(); ++x) {
-			float prior = beliefs[y][x];
-			if (grid[0][x] == color) {
-				p = prior * p_hit;
+			new_beliefs[y][x] = beliefs[y][x];
+			if (grid[y][x] == color) {
+				new_beliefs[y][x] *= p_hit;
 			}
 			else {
-				p = prior * p_miss;
+				new_beliefs[y][x] *= p_miss;
 			}
 			new_row.push_back(p);
 		}
@@ -197,21 +188,13 @@ vector< vector <float> > move(int dy, int dx,
 	int height = beliefs.size();
 	int width = beliefs[0].size();
 
-	vector < vector<float> > new_G;
-	for (int h = 0; h < height; ++h) {
-		vector<float> init_row;
-		for (int w = 0; w < width; ++w) {
-			init_row.push_back(0);
-		}
-		new_G.push_back(init_row);
-	}
-			
+	vector < vector<float> > new_G = zeros(height, width);;
 
-	for (int i = 0; i < beliefs.size(); ++i) {
-		for (int j = 0; j < beliefs[0].size(); ++j) {
-			float new_i = (i + dy) % width;
-			float new_j = (j + dx) % height;
-			new_G[(int)new_j][(int)new_i] = beliefs[0][j];
+	for (int i = 0; i < height; ++i) {
+		for (int j = 0; j < width; ++j) {
+			int new_i = (i + dy + height) % height;
+			int new_j = (j + dx + width) % width;
+			newGrid[new_i][new_j] = beliefs[i][j];
 		}
 	}
 	return blur(newGrid, blurring);

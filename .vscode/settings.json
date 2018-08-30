@@ -6,6 +6,8 @@
         "typeinfo": "cpp",
         "iostream": "cpp",
         "*.tcc": "cpp",
-        "system_error": "cpp"
+        "system_error": "cpp",
+        "array": "cpp",
+        "vector": "cpp"
     }
 }
