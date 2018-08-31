@@ -8,6 +8,8 @@
         "*.tcc": "cpp",
         "system_error": "cpp",
         "array": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "deque": "cpp",
+        "unordered_map": "cpp"
     }
 }

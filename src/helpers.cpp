@@ -18,6 +18,7 @@
 #include "debugging_helpers.cpp"
 
 using namespace std;
+
 /**
     Creates a grid of zeros
 

@@ -39,10 +39,10 @@ void show_grid(vector < vector <char> > map) {
 	int i, j;
 	char p;
 	vector<char> row;
-	for (i = 0; i < map.size(); i++)
+	for ( i = 0; i < map.size(); i++)
 	{
 		row = map[i];
-		for (j=0; j< row.size(); j++)
+		for ( j=0; j< row.size(); j++)
 		{
 			p = row[j];	
 			cout << p << ' ';
